@@ -1,0 +1,10 @@
+{
+  "version": "2.0.0",
+  "extension": {
+    "id": "com.workbuddy.webdav-sync-probe",
+    "name": "WebDAV 能力自检",
+    "description": "阶段 0 验证插件：检查 Comlink 二进制通道、Project 文件读写与 WebDAV 自定义方法是否可用",
+    "version": "0.0.1",
+    "author": "WorkBuddy"
+  }
+}

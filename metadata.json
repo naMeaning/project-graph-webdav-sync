@@ -1,0 +1,10 @@
+{
+  "version": "2.0.0",
+  "extension": {
+    "id": "com.workbuddy.webdav-sync",
+    "name": "WebDAV / S3 Sync",
+    "description": "把当前 .prg 工程同步到坚果云等 WebDAV 或 S3 兼容存储，支持冲突手动选择、备份与低频自动同步",
+    "version": "0.5.4",
+    "author": "namean"
+  }
+}
