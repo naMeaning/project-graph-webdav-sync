@@ -1,9 +1,22 @@
-# Project Graph WebDAV / S3 Sync
+# WebDAV / S3 Sync — Project Graph 同步扩展
+
+[![release](https://img.shields.io/github/v/release/naMeaning/project-graph-webdav-sync)](https://github.com/naMeaning/project-graph-webdav-sync/releases)
+[![topic](https://img.shields.io/badge/topic-extprg-blue)](https://github.com/topics/extprg)
+
+作者：**namean** ｜ 仓库：https://github.com/naMeaning/project-graph-webdav-sync
+
+**安装**：到 [Releases](https://github.com/naMeaning/project-graph-webdav-sync/releases) 下载最新的 `.prg`，拖进 Project Graph，然后重载应用。
+
+---
 
 把**整个文件夹**（默认是当前 `.prg` 所在的目录）同步到坚果云等标准 WebDAV。也可以只同步单个 `.prg`，或改用 S3 兼容存储（R2 / B2 / MinIO / 腾讯云 COS）。同步算法与交互参考 Obsidian 的 Remotely Save。
 
-**当前状态：v0.5.2。** 已通过 29 个本地模拟场景测试（含 S3 签名交叉校验、目录递归同步、忽略规则、三向冲突、删除策略、IIFE 语法校验、表单窗口通道、快捷键注册回调）。
+**当前状态：v0.5.4。** 已通过 29 个本地模拟场景测试（含 S3 签名交叉校验、目录递归同步、忽略规则、三向冲突、删除策略、IIFE 语法校验、表单窗口通道、快捷键注册回调）。
 
+> **v0.5.4** 作者改为 namean；配置通道的尝试结果会写入设置项 `_lastConfig`（排障用）；按配置键立刻有 toast 反馈。
+>
+> **v0.5.3** 修正表单 schema（补 `$schema`，否则 `z.fromJSONSchema` 解析失败）、区分「用户取消」与「接口不可用」；通道顺序改为 **表单窗口 → 单框对话框 → 记事本**。
+>
 > **v0.5.2 修的是表单窗口体验。** 之前表单给了 10 个字段，而主程序 FormWindow 的子窗口高度只有屏高 62% 且**没有滚动条**，字段一多【保存】按钮就被挤出可视区，表现就是「按钮点不到」；同时所有字段都设了必填，只想改账号密码也会被校验卡住。现在表单精简为 **5 个字段、全部非必填（留空＝保持不变）**。
 >
 > **v0.5.1 修的是快捷键注册。** v0.2.0 起我把注册回调从 `Comlink.proxy(...)` 改成了普通函数，主程序收不到可跨线程调用的回调，**注册直接失败**——表现是扩展详情页「快捷键」里一个命令都不显示，按任何快捷键都没反应。v0.5.1 恢复 `Comlink.proxy` 包装，并且**只使用磁盘上已存在的 6 个命令 ID**（新增 ID 需要写 keybinds2.json，那条路会失败），功能全部挂在这 6 个 ID 上。
@@ -18,7 +31,7 @@
 
 > **不要用扩展设置页的输入框**。主程序用的是受控输入框，但没有订阅扩展设置的变化（`Extension.tsx` 312–355 行），打进去的字不会回显，看起来就是"输不进去"。插件无法绕过。
 
-> **从旧版升级**：先卸载旧版再装 v0.5.2。判断是否装对：按 `Ctrl+Shift+Alt+I` 或看加载提示，应出现 `v0.5.2`。
+> **从旧版升级**：先卸载旧版再装 v0.5.4。判断是否装对：按 `Ctrl+Shift+Alt+I` 或看加载提示，应出现 `v0.5.4`。
 
 ## 如果整个界面都打不进字 / 点不动
 
@@ -26,14 +39,14 @@
 
 1. 先保存工程。
 2. **完全退出 Project Graph 再重新打开**（不是「重载应用」，重载不会清 DOM 状态）。
-3. 恢复后按 `Ctrl+Shift+Alt+I` 确认插件版本（提示条里应有 `v0.5.2`）；配置走 `Ctrl+Shift+Alt+C`。
+3. 恢复后按 `Ctrl+Shift+Alt+I` 确认插件版本（提示条里应有 `v0.5.4`）；配置走 `Ctrl+Shift+Alt+C`。
 
 ## 安装
 
-1. 把 `out/com.workbuddy.webdav-sync-0.5.2.prg` 拖进 Project Graph；或解压成同名文件夹放进设置里显示的「扩展目录」。
+1. 把 `out/com.workbuddy.webdav-sync-0.5.4.prg` 拖进 Project Graph；或解压成同名文件夹放进设置里显示的「扩展目录」。
 2. 给「重载应用」绑定快捷键（例如 `Ctrl+F5`）。**重载会丢失未保存的文件，先保存工程。**
 3. 确认加载成功（任选其一即可）：
-   - toast 显示「WebDAV / S3 Sync v0.5.2 已加载」
+   - toast 显示「WebDAV / S3 Sync v0.5.4 已加载」
    - 「快捷键」标签里出现 6 个命令（同步/上传/下载/配置/状态/重置）
    - 扩展详情页「快捷键」标签里有 9 个命令
 
@@ -199,7 +212,7 @@
 零依赖打包（推荐，不需要 npm 网络，因为扩展是 Web Worker + Blob URL，不能 import 其他模块，源码刻意保持单文件纯 JS 语法）：
 
 ```bash
-python tools/build.py          # 生成 out/com.workbuddy.webdav-sync-0.5.2.prg
+python tools/build.py          # 生成 out/com.workbuddy.webdav-sync-0.5.4.prg
 python tools/build_probe.py    # 重新生成阶段 0 自检包
 node tests/smoke.mjs           # 29 个模拟场景回归测试
 ```
