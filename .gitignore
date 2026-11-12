@@ -1,0 +1,13 @@
+node_modules/
+dist/
+out/
+*.log
+
+# 构建产物
+metadata.msgpack
+stage0/metadata.msgpack
+
+# 测试临时文件
+tests/.tmp-extension.mjs
+tests/.packed.js
+tests/.tmp-*
